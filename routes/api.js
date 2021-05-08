@@ -21,5 +21,12 @@ router.get('/', function(req, res, next) {
     res.status(200).send('one');
 });
 
+router.get('/setStatus', function(req, res, next) {
+    res.status(200).send('status set');
+});
+
+
+
+
 
 module.exports = router;
