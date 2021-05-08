@@ -1,0 +1,71 @@
+<div class="layout-px-spacing">
+
+    <div class="row layout-top-spacing">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+            <div class="row">
+                <div class="col-lg-12 col-12 layout-spacing">
+                    <div class="statbox widget box box-shadow">
+                        <div class="widget-header">
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                    <h4>Real Time Update</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="realTimeMap" style="height: 1000px; padding: 5px 10px 10px;"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    let realTimeMap;
+    let markers = [];
+
+    function initMap() {
+        realTimeMap = new google.maps.Map(document.getElementById("realTimeMap"), {
+            zoom: 7,
+            center: {
+                lat: 6.9271,
+                lng: 79.8612
+            },
+        });
+
+        let marker = {lat: 6.9271, lng: 79.8612};
+        addMarker(marker, realTimeMap);
+    }
+
+    function addMarker(location, map) {
+        let marker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
+        markers.push(marker);
+    }
+
+    function setMapOnAll(map) {
+        for (let i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+        }
+    }
+
+    function clearMarkers() {
+        setMapOnAll(null);
+    }
+
+    function showMarkers() {
+        setMapOnAll(map);
+    }
+
+    function deleteMarkers() {
+        clearMarkers();
+        markers = [];
+    }
+
+</script>
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyB8BbO_t_LXJLuBuHLnRMvXBJH8_S7q2IM&callback=initMap" async></script>
+
