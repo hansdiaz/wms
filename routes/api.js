@@ -1,6 +1,7 @@
 let express = require('express');
 let router = express.Router();
 const firebase = require('firebase');
+const firebaseDatabase = require('firebase/database');
 
 const firebaseConfig = {
     apiKey: "AIzaSyAId5U8P5nDEhytscOGupt7yymM9R0Gdsc",
@@ -13,6 +14,8 @@ const firebaseConfig = {
     measurementId: "G-1MER911JKD"
 };
 
+let database = firebase.database();
+
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
@@ -22,7 +25,25 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/setStatus', function(req, res, next) {
-    res.status(200).send('status set');
+
+    database.ref().child('WB').child('WB1').limitToLast(1).get().then((snapshot) => {
+            if (snapshot.exists()) {
+
+                snapshot.forEach((child) => {
+
+                    if(child.val().altitude < 1250){
+                        res.status(200).json(child.val().altitude);
+                    }else{
+                        res.status(200).json(child.val().altitude);
+                    }
+                });
+
+
+            } else {
+                console.log("No data available");
+            }
+
+    });
 });
 
 
