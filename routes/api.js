@@ -32,9 +32,26 @@ router.get('/setStatus', function(req, res, next) {
                 snapshot.forEach((child) => {
 
                     if(child.val().altitude < 1250){
-                        res.status(200).json(child.val().altitude);
+                        database.ref().child('SG').child('SG1').update({
+                            status: 1,
+                        }, (error) => {
+                            if (error) {
+                                res.status(500);
+                            } else {
+                                res.status(200);
+                            }
+                        });
+
                     }else{
-                        res.status(200).json(child.val().altitude);
+                        database.ref().child('SG').child('SG1').update({
+                            status: 1,
+                        }, (error) => {
+                            if (error) {
+                                res.status(500);
+                            } else {
+                                res.status(200);
+                            }
+                        });
                     }
                 });
 
