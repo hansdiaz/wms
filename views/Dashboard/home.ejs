@@ -1,3 +1,27 @@
+
+<script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-analytics.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-database.js"></script>
+
+<script>
+
+    var firebaseConfig = {
+        apiKey: "AIzaSyAId5U8P5nDEhytscOGupt7yymM9R0Gdsc",
+        authDomain: "wildlife-monitoring-system.firebaseapp.com",
+        databaseURL: "https://wildlife-monitoring-system-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "wildlife-monitoring-system",
+        storageBucket: "wildlife-monitoring-system.appspot.com",
+        messagingSenderId: "345584392239",
+        appId: "1:345584392239:web:1588fc68d350da6ecc4eda",
+        measurementId: "G-1MER911JKD"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+</script>
+
 <div class="layout-px-spacing">
 
     <div class="row layout-top-spacing">
@@ -38,14 +62,15 @@
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="form-group mb-0">
-                                                <input id="txtDateCB" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
+                                                <input id="selectdate1" name="selectdate1" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
                                             </div>
                                             <br/>
                                             <div class="form-group mb-0">
-                                                <select class="form-control basic">
-                                                    <option selected="selected">Select Tracker</option>
-                                                    <option>Terrestrial Tracker</option>
+                                                <select id="select1" class="form-control basic">
+                                                    <option selected="selected">Terrestial Tracker 1</option>
+                                                    <option>Terrestial Tracker 2</option>
                                                     <option>Marine Tracker</option>
+                                                    <option>Aerial Tracker</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -60,7 +85,7 @@
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="form-group mb-0">
-                                                <input id="txtDateCP" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
+                                                <input id="selectdate2" name="selectdate2" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
                                             </div>
                                             <br/>
                                             <div class="form-group mb-0">
@@ -82,7 +107,7 @@
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="form-group mb-0">
-                                                <input id="txtDateRS" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
+                                                <input id="selectdate3" name="selectdate3" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
                                             </div>
                                             <br/>
                                             <div class="form-group mb-0">
@@ -104,7 +129,7 @@
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="form-group mb-0">
-                                                <input id="txtDateWS" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
+                                                <input id="selectdate4" name="selectdate4" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
                                             </div>
                                             <br/>
                                             <div class="form-group mb-0">
@@ -132,8 +157,8 @@
 <!--<script type="text/javascript" src="/javascripts/map-picker.js"></script>-->
 <!--<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyB8BbO_t_LXJLuBuHLnRMvXBJH8_S7q2IM&callback=initMap" async></script>-->
 <script>
-    function initMap() {
-
+    function initMap()
+    {
         //Start Div Compare Behavior Map//
         let heatMapDataForCB = [
             {location: new google.maps.LatLng(37.782, -122.447), weight: 0.5},
@@ -280,8 +305,96 @@
 
         //End Div Waterbody Status Map//
     }
+
+    window.getData=function(){
+
+        var dateSelected = document.getElementById('selectdate1').value;
+        console.log(String(dateSelected));
+        var animal = document.getElementById('select1').value;
+        console.log(String(animal));
+        var trackerId;
+        if(animal=="Terrestial Tracker 1")
+            trackerId="TKT1";
+        else if(animal=="Terrestial Tracker 2")
+            trackerId="TKT2";
+        else if(animal=="Marine Tracker")
+            trackerId="TKM1";
+        else if(animal=="Aerial Tracker")
+            trackerId="TKA1";
+
+        console.log(trackerId);
+        var splt= dateSelected.split(":");
+        var year=splt[0];
+        var month= splt[1];
+        var day=splt[2];
+        //var dayArray,monthArray
+        if(month<10){
+            month=month.split("0");
+            month=month[1];
+        }
+
+        if(day<10){
+            day=day.split("0");
+            day=day[1];
+        }
+        dateSelected=year+":"+month+":"+day;
+        console.log(dateSelected);
+
+        firebase.database().ref().child('TK').child(trackerId).orderByChild("date").equalTo(String(dateSelected)).on("value", function(snapshot) {
+            if (snapshot.exists()) {
+                console.log(snapshot.val());
+                var data= snapshot.val();
+                snapshot.forEach((child) => {
+                    if(child.val().lat!=0){
+                        console.log("Lat:"+child.val().lat+" Long:"+child.val().long);
+
+                    }
+
+                });
+            }
+            else
+                console.log("data not retrieved or no data");
+        });
+
+    }
+
 </script>
 
 <script async
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8BbO_t_LXJLuBuHLnRMvXBJH8_S7q2IM&libraries=visualization&callback=initMap">
+</script>
+
+<script>
+    $( document ).ready(function() {
+        let dateCB = flatpickr(document.getElementById('selectdate1'), {
+            dateFormat: "Y:m:d"
+        });
+        let dateCP = flatpickr(document.getElementById('selectdate2'), {
+            dateFormat: "Y:m:d"
+        });
+
+        let dateRS = flatpickr(document.getElementById('selectdate3'), {
+            dateFormat: "Y:m:d"
+        });
+
+        let dateWS = flatpickr(document.getElementById('selectdate4'), {
+            dateFormat: "Y:m:d"
+        });
+
+        // firebase.database().ref().child('TK').child('TKA1').get().then((snapshot) => {
+        //     if (snapshot.exists()) {
+        //         console.log(snapshot.val());
+        //     }else{
+        //
+        //     }
+        // });
+
+        $("#selectdate1").change(function changeSession() {
+            getData();
+        });
+
+        $("#select1").change(function changeSession() {
+            getData();
+        });
+    });
 </script>
