@@ -160,38 +160,38 @@
     function initMap()
     {
         //Start Div Compare Behavior Map//
-        let heatMapDataForCB = [
-            {location: new google.maps.LatLng(37.782, -122.447), weight: 0.5},
-            new google.maps.LatLng(37.782, -122.445),
-            {location: new google.maps.LatLng(37.782, -122.443), weight: 2},
-            {location: new google.maps.LatLng(37.782, -122.441), weight: 3},
-            {location: new google.maps.LatLng(37.782, -122.439), weight: 2},
-            new google.maps.LatLng(37.782, -122.437),
-            {location: new google.maps.LatLng(37.782, -122.435), weight: 0.5},
 
-            {location: new google.maps.LatLng(37.785, -122.447), weight: 3},
-            {location: new google.maps.LatLng(37.785, -122.445), weight: 2},
-            new google.maps.LatLng(37.785, -122.443),
-            {location: new google.maps.LatLng(37.785, -122.441), weight: 0.5},
-            new google.maps.LatLng(37.785, -122.439),
-            {location: new google.maps.LatLng(37.785, -122.437), weight: 2},
-            {location: new google.maps.LatLng(37.785, -122.435), weight: 3}
-        ];
-
-
-        let mapCenterLocationForCB = new google.maps.LatLng(37.774546, -122.433523);
-
-
-        let mapCB = new google.maps.Map(document.getElementById('cbMap'), {
-            center: mapCenterLocationForCB,
-            zoom: 12,
-            mapTypeId: 'satellite'
-        });
-
-        let heatmapCB = new google.maps.visualization.HeatmapLayer({
-            data: heatMapDataForCB
-        });
-        heatmapCB.setMap(mapCB);
+        // let heatMapDataForCB = [
+        //     {location: new google.maps.LatLng(37.782, -122.447), weight: 0.5},
+        //     {location: new google.maps.LatLng(37.782, -122.445), weight: 2},
+        //     {location: new google.maps.LatLng(37.782, -122.443), weight: 2},
+        //     {location: new google.maps.LatLng(37.782, -122.443), weight: 2},
+        //     {location: new google.maps.LatLng(37.782, -122.441), weight: 3},
+        //     {location: new google.maps.LatLng(37.782, -122.439), weight: 2},
+        //     {location: new google.maps.LatLng(37.782, -122.437), weight: 0.5},
+        //     {location: new google.maps.LatLng(37.782, -122.435), weight: 0.5},
+        //     {location: new google.maps.LatLng(37.785, -122.447), weight: 3},
+        //     {location: new google.maps.LatLng(37.785, -122.445), weight: 2},
+        //     {location: new google.maps.LatLng(37.785, -122.443), weight: 2},
+        //     {location: new google.maps.LatLng(37.785, -122.441), weight: 0.5},
+        //     {location: new google.maps.LatLng(37.785, -122.439), weight: 5},
+        //     {location: new google.maps.LatLng(37.785, -122.437), weight: 5},
+        //     {location: new google.maps.LatLng(37.785, -122.435), weight: 5}
+        // ];
+        //
+        // let mapCenterLocationForCB = new google.maps.LatLng(37.774546, -122.433523);
+        //
+        //
+        // let mapCB = new google.maps.Map(document.getElementById('cbMap'), {
+        //     center: mapCenterLocationForCB,
+        //     zoom: 15,
+        //     mapTypeId: 'satellite'
+        // });
+        //
+        // let heatmapCB = new google.maps.visualization.HeatmapLayer({
+        //     data: heatMapDataForCB
+        // });
+        // heatmapCB.setMap(mapCB);
 
         //End Div Compare Behavior Map//
 
@@ -327,7 +327,14 @@
         var year=splt[0];
         var month= splt[1];
         var day=splt[2];
-        //var dayArray,monthArray
+
+        var historyLongArrayForCB=[];
+        var historyLatArrayForCB=[];
+        var longArrayForCB=[];
+        var latArrayForCB=[];
+        var locFrequency=[];
+        var heatMapArrayForCB=[];
+
         if(month<10){
             month=month.split("0");
             month=month[1];
@@ -346,17 +353,111 @@
                 var data= snapshot.val();
                 snapshot.forEach((child) => {
                     if(child.val().lat!=0){
-                        console.log("Lat:"+child.val().lat+" Long:"+child.val().long);
+
+                        let latVal=child.val().lat;
+                        let longVal=child.val().long;
+                        latVal=String(latVal);
+                        latVal=latVal.split(".");
+                        let latInt= latVal[0];
+                        let latFloat= latVal[1];
+                        latFloat=latFloat.substr(0,4);
+                        latVal=latInt+"."+latFloat;
+                        latVal=parseFloat(latVal);
+
+                        //reduce long value to four decimal points
+                        longVal=String(longVal);
+                        longVal=longVal.split(".");
+                        let longInt= longVal[0];
+                        let longFloat= longVal[1];
+                        longFloat=longFloat.substr(0,4);
+                        longVal=longInt+"."+longFloat;
+                        longVal=parseFloat(longVal);
+
+                        console.log("Lat:"+latVal+" Long:"+longVal);
+                        console.log("---------------------------------------------------------------");
+                        historyLatArrayForCB.push(latVal);
+                        historyLongArrayForCB.push(longVal);
 
                     }
 
                 });
+
+                console.log("***************************************************");
+                for (let j = 0; j < historyLatArrayForCB.length; j++)
+                {
+                    console.log("Long:"+historyLongArrayForCB[j]+" Lat:"+historyLatArrayForCB[j]);
+                    // console.log("Lat:"+longArrayForCB[j]+" Long:"+latArrayForCB[j]+" Frequency:"+locFrequency[j]);
+                }
+                console.log("***************************************************");
+                console.log(historyLatArrayForCB.length+" is history array length");
+
+
+                for (let i = 0; i < historyLatArrayForCB.length; i++)
+                {
+                    if(i==0)
+                    {
+                        locFrequency.push(1);
+                        longArrayForCB.push(historyLongArrayForCB[i]);
+                        latArrayForCB.push(historyLatArrayForCB[i]);
+                    }
+                    else
+                    {
+                        let found=0;
+                        for(let j=0;j<locFrequency.length;j++)
+                        {
+                            if(historyLongArrayForCB[i]===longArrayForCB[j] && historyLatArrayForCB[i]===latArrayForCB[j])
+                            {
+                                locFrequency[j]++;
+                                found=1;
+                            }
+                            if(j==(locFrequency.length-1) && found==0){
+                                locFrequency.push(0);
+                                longArrayForCB.push(historyLongArrayForCB[i]);
+                                latArrayForCB.push(historyLatArrayForCB[i]);
+                            }
+                        }
+                    }
+                }
+
+
+                let max_of_freq = Math.max.apply(Math, locFrequency);
+                let min_of_freq = Math.min.apply(Math, locFrequency);
+                console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                for (let j = 0; j < longArrayForCB.length; j++)
+                {
+                    console.log("Long:"+longArrayForCB[j]+" Lat:"+latArrayForCB[j]+" Frequency:"+locFrequency[j]);
+                    let value = locFrequency[j];
+                    let mappedValue = map(value, min_of_freq, max_of_freq, 0.5, 5);
+                    console.log("mapped value:"+mappedValue);
+                    heatMapArrayForCB[j]="location: new google.maps.LatLng("+latArrayForCB[j]+", "+longArrayForCB[j]+"), weight: "+mappedValue;
+                    console.log(heatMapArrayForCB[j]);
+                }
+                console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+                let mapCenterLocationForCB = "new google.maps.LatLng("+latArrayForCB[0]+", "+longArrayForCB[0]+")";
+
+
+                let mapCB = new google.maps.Map(document.getElementById('cbMap'), {
+                    center: mapCenterLocationForCB,
+                    zoom: 15,
+                    mapTypeId: 'satellite'
+                });
+
+                let heatmapCB = new google.maps.visualization.HeatmapLayer({
+                    data: heatMapDataForCB
+                });
+                heatmapCB.setMap(mapCB);
             }
             else
                 console.log("data not retrieved or no data");
         });
 
     }
+
+    function map( x,  in_min,  in_max,  out_min,  out_max){
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    }
+
 
 </script>
 
