@@ -161,37 +161,11 @@
     {
         //Start Div Compare Behavior Map//
 
-        // let heatMapDataForCB = [
-        //     {location: new google.maps.LatLng(37.782, -122.447), weight: 0.5},
-        //     {location: new google.maps.LatLng(37.782, -122.445), weight: 2},
-        //     {location: new google.maps.LatLng(37.782, -122.443), weight: 2},
-        //     {location: new google.maps.LatLng(37.782, -122.443), weight: 2},
-        //     {location: new google.maps.LatLng(37.782, -122.441), weight: 3},
-        //     {location: new google.maps.LatLng(37.782, -122.439), weight: 2},
-        //     {location: new google.maps.LatLng(37.782, -122.437), weight: 0.5},
-        //     {location: new google.maps.LatLng(37.782, -122.435), weight: 0.5},
-        //     {location: new google.maps.LatLng(37.785, -122.447), weight: 3},
-        //     {location: new google.maps.LatLng(37.785, -122.445), weight: 2},
-        //     {location: new google.maps.LatLng(37.785, -122.443), weight: 2},
-        //     {location: new google.maps.LatLng(37.785, -122.441), weight: 0.5},
-        //     {location: new google.maps.LatLng(37.785, -122.439), weight: 5},
-        //     {location: new google.maps.LatLng(37.785, -122.437), weight: 5},
-        //     {location: new google.maps.LatLng(37.785, -122.435), weight: 5}
-        // ];
-        //
-        // let mapCenterLocationForCB = new google.maps.LatLng(37.774546, -122.433523);
-        //
-        //
-        // let mapCB = new google.maps.Map(document.getElementById('cbMap'), {
-        //     center: mapCenterLocationForCB,
-        //     zoom: 15,
-        //     mapTypeId: 'satellite'
-        // });
-        //
-        // let heatmapCB = new google.maps.visualization.HeatmapLayer({
-        //     data: heatMapDataForCB
-        // });
-        // heatmapCB.setMap(mapCB);
+        let mapCB = new google.maps.Map(document.getElementById("cbMap"), {
+            center: { lat: 7.8731, lng: 80.7718 },
+            zoom: 10,
+            mapTypeId: 'satellite'
+        });
 
         //End Div Compare Behavior Map//
 
@@ -422,6 +396,8 @@
 
                 let max_of_freq = Math.max.apply(Math, locFrequency);
                 let min_of_freq = Math.min.apply(Math, locFrequency);
+                let lastLat;
+                let lastLong;
                 console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                 for (let j = 0; j < longArrayForCB.length; j++)
                 {
@@ -429,22 +405,24 @@
                     let value = locFrequency[j];
                     let mappedValue = map(value, min_of_freq, max_of_freq, 0.5, 5);
                     console.log("mapped value:"+mappedValue);
-                    heatMapArrayForCB[j]="location: new google.maps.LatLng("+latArrayForCB[j]+", "+longArrayForCB[j]+"), weight: "+mappedValue;
+                    heatMapArrayForCB[j]={location: new google.maps.LatLng(+latArrayForCB[j], longArrayForCB[j]), weight: mappedValue};
                     console.log(heatMapArrayForCB[j]);
+
+                    lastLat=latArrayForCB[j];
+                    lastLong=longArrayForCB[j];
                 }
                 console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
-                let mapCenterLocationForCB = "new google.maps.LatLng("+latArrayForCB[0]+", "+longArrayForCB[0]+")";
-
+                let mapCenterLocationForCB = new google.maps.LatLng(lastLat, lastLong);
 
                 let mapCB = new google.maps.Map(document.getElementById('cbMap'), {
                     center: mapCenterLocationForCB,
-                    zoom: 15,
+                    zoom: 18,
                     mapTypeId: 'satellite'
                 });
 
                 let heatmapCB = new google.maps.visualization.HeatmapLayer({
-                    data: heatMapDataForCB
+                    data: heatMapArrayForCB
                 });
                 heatmapCB.setMap(mapCB);
             }
