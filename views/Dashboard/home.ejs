@@ -61,21 +61,34 @@
                                             <br/>
                                         </div>
                                         <div class="col-lg-3">
+                                            Select Date
                                             <div class="form-group mb-0">
                                                 <input id="selectdate1" name="selectdate1" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
                                             </div>
                                             <br/>
+                                            Select Animal to Compare
                                             <div class="form-group mb-0">
-                                                <select id="select1" class="form-control basic">
-                                                    <option selected="selected">Terrestial Tracker 1</option>
-                                                    <option>Terrestial Tracker 2</option>
-                                                    <option>Marine Tracker</option>
-                                                    <option>Aerial Tracker</option>
+                                                <select id="select_cb_1" class="form-control basic">
+                                                   <option selected="selected">Terrestial Tracker 1</option>
+                                                   <option>Terrestial Tracker 2</option>
+                                                   <option>Marine Tracker</option>
+                                                   <option>Aerial Tracker</option>
+                                                </select>
+                                            </div>
+
+                                            Select Animal to Compare with
+                                            <div class="form-group mb-0">
+                                                <select id="select_cb_2" class="form-control basic">
+                                                   <option selected="selected">Terrestial Tracker 1</option>
+                                                   <option>Terrestial Tracker 2</option>
+                                                   <option>Marine Tracker</option>
+                                                   <option>Aerial Tracker</option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
 
                                 <div class="tab-pane fade" id="consumption_patterns" role="tabpanel" aria-labelledby="justify-center-pills-profile-tab">
                                     <div class="row">
@@ -84,15 +97,18 @@
                                             <br/>
                                         </div>
                                         <div class="col-lg-3">
+                                            Select Date
                                             <div class="form-group mb-0">
                                                 <input id="selectdate2" name="selectdate2" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
                                             </div>
                                             <br/>
+                                            Select Animal to observe consumption
                                             <div class="form-group mb-0">
-                                                <select class="form-control basic">
-                                                    <option selected="selected">Select Tracker</option>
-                                                    <option>Terrestrial Tracker</option>
+                                                <select id="select_consumer" class="form-control basic">
+                                                    <option selected="selected">Terrestial Tracker 1</option>
+                                                    <option>Terrestial Tracker 2</option>
                                                     <option>Marine Tracker</option>
+                                                    <option>Aerial Tracker</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -163,140 +179,55 @@
 
         let mapCB = new google.maps.Map(document.getElementById("cbMap"), {
             center: { lat: 7.8731, lng: 80.7718 },
-            zoom: 10,
+            zoom: 8,
             mapTypeId: 'satellite'
         });
-
         //End Div Compare Behavior Map//
 
         //Start Div Consumption Patterns Map//
-        let heatMapDataForCP = [
-            {location: new google.maps.LatLng(37.782, -122.447), weight: 0.5},
-            new google.maps.LatLng(37.782, -122.445),
-            {location: new google.maps.LatLng(37.782, -122.443), weight: 2},
-            {location: new google.maps.LatLng(37.782, -122.441), weight: 3},
-            {location: new google.maps.LatLng(37.782, -122.439), weight: 2},
-            new google.maps.LatLng(37.782, -122.437),
-            {location: new google.maps.LatLng(37.782, -122.435), weight: 0.5},
 
-            {location: new google.maps.LatLng(37.785, -122.447), weight: 3},
-            {location: new google.maps.LatLng(37.785, -122.445), weight: 2},
-            new google.maps.LatLng(37.785, -122.443),
-            {location: new google.maps.LatLng(37.785, -122.441), weight: 0.5},
-            new google.maps.LatLng(37.785, -122.439),
-            {location: new google.maps.LatLng(37.785, -122.437), weight: 2},
-            {location: new google.maps.LatLng(37.785, -122.435), weight: 3}
-        ];
-
-
-        let mapCenterLocationForCP = new google.maps.LatLng(37.774546, -122.433523);
-
-
-        let mapCP = new google.maps.Map(document.getElementById('cpMap'), {
-            center: mapCenterLocationForCP,
-            zoom: 12,
+        let mapCP = new google.maps.Map(document.getElementById("cpMap"), {
+            center: { lat: 7.8731, lng: 80.7718 },
+            zoom: 8,
             mapTypeId: 'satellite'
         });
-
-        let heatmapCP = new google.maps.visualization.HeatmapLayer({
-            data: heatMapDataForCP
-        });
-        heatmapCP.setMap(mapCP);
-
         //End Div Consumption Patterns Map//
 
         //Start Div Rainfall and Soil Map//
-        let heatMapDataForRS = [
-            {location: new google.maps.LatLng(37.782, -122.447), weight: 0.5},
-            new google.maps.LatLng(37.782, -122.445),
-            {location: new google.maps.LatLng(37.782, -122.443), weight: 2},
-            {location: new google.maps.LatLng(37.782, -122.441), weight: 3},
-            {location: new google.maps.LatLng(37.782, -122.439), weight: 2},
-            new google.maps.LatLng(37.782, -122.437),
-            {location: new google.maps.LatLng(37.782, -122.435), weight: 0.5},
 
-            {location: new google.maps.LatLng(37.785, -122.447), weight: 3},
-            {location: new google.maps.LatLng(37.785, -122.445), weight: 2},
-            new google.maps.LatLng(37.785, -122.443),
-            {location: new google.maps.LatLng(37.785, -122.441), weight: 0.5},
-            new google.maps.LatLng(37.785, -122.439),
-            {location: new google.maps.LatLng(37.785, -122.437), weight: 2},
-            {location: new google.maps.LatLng(37.785, -122.435), weight: 3}
-        ];
-
-
-        let mapCenterLocationForRS = new google.maps.LatLng(37.774546, -122.433523);
-
-
-        let mapRS = new google.maps.Map(document.getElementById('rsMap'), {
-            center: mapCenterLocationForRS,
-            zoom: 12,
+        let mapRS = new google.maps.Map(document.getElementById("rsMap"), {
+            center: { lat: 7.8731, lng: 80.7718 },
+            zoom: 8,
             mapTypeId: 'satellite'
         });
-
-        let heatmapRS = new google.maps.visualization.HeatmapLayer({
-            data: heatMapDataForRS
-        });
-        heatmapRS.setMap(mapRS);
-
         //End Div Rainfall and Soil Map//
 
         //Start Div Waterbody Status Map//
-        let heatMapDataForWS = [
-            {location: new google.maps.LatLng(37.782, -122.447), weight: 0.5},
-            new google.maps.LatLng(37.782, -122.445),
-
-            {location: new google.maps.LatLng(37.782, -122.443), weight: 2},
-            {location: new google.maps.LatLng(37.782, -122.441), weight: 3},
-            {location: new google.maps.LatLng(37.782, -122.439), weight: 2},
-            new google.maps.LatLng(37.782, -122.437),
-
-            {location: new google.maps.LatLng(37.782, -122.435), weight: 0.5},
-            {location: new google.maps.LatLng(37.785, -122.447), weight: 3},
-            {location: new google.maps.LatLng(37.785, -122.445), weight: 2},
-            new google.maps.LatLng(37.785, -122.443),
-
-            {location: new google.maps.LatLng(37.785, -122.441), weight: 0.5},
-            new google.maps.LatLng(37.785, -122.439),
-            {location: new google.maps.LatLng(37.785, -122.437), weight: 2},
-            {location: new google.maps.LatLng(37.785, -122.435), weight: 3}
-        ];
-
-
-        let mapCenterLocationForWS = new google.maps.LatLng(37.774546, -122.433523);
-
-
-        let mapWS = new google.maps.Map(document.getElementById('wsMap'), {
-            center: mapCenterLocationForWS,
-            zoom: 12,
+        let mapWS = new google.maps.Map(document.getElementById("wsMap"), {
+            center: { lat: 7.8731, lng: 80.7718 },
+            zoom: 8,
             mapTypeId: 'satellite'
         });
-
-        let heatmapWS = new google.maps.visualization.HeatmapLayer({
-            data: heatMapDataForWS
-        });
-        heatmapWS.setMap(mapWS);
-
         //End Div Waterbody Status Map//
     }
 
-    window.getData=function(){
+    window.processBehavior=function(){
 
         var dateSelected = document.getElementById('selectdate1').value;
         console.log(String(dateSelected));
-        var animal = document.getElementById('select1').value;
+        var animal = document.getElementById('select_cb_1').value;
         console.log(String(animal));
-        var trackerId;
+        var trackerId1;
         if(animal=="Terrestial Tracker 1")
-            trackerId="TKT1";
+            trackerId1="TKT1";
         else if(animal=="Terrestial Tracker 2")
-            trackerId="TKT2";
+            trackerId1="TKT2";
         else if(animal=="Marine Tracker")
-            trackerId="TKM1";
+            trackerId1="TKM1";
         else if(animal=="Aerial Tracker")
-            trackerId="TKA1";
+            trackerId1="TKA1";
 
-        console.log(trackerId);
+        console.log(trackerId1);
         var splt= dateSelected.split(":");
         var year=splt[0];
         var month= splt[1];
@@ -308,6 +239,23 @@
         var latArrayForCB=[];
         var locFrequency=[];
         var heatMapArrayForCB=[];
+
+        const gradient = [
+            "rgba(0, 255, 255, 0)",
+            "rgba(0, 255, 255, 1)",
+            "rgba(0, 191, 255, 1)",
+            "rgba(0, 127, 255, 1)",
+            "rgba(0, 63, 255, 1)",
+            "rgba(0, 0, 255, 1)",
+            "rgba(0, 0, 223, 1)",
+            "rgba(0, 0, 191, 1)",
+            "rgba(0, 0, 159, 1)",
+            "rgba(0, 0, 127, 1)",
+            "rgba(63, 0, 91, 1)",
+            "rgba(127, 0, 63, 1)",
+            "rgba(191, 0, 31, 1)",
+            "rgba(255, 0, 0, 1)",
+        ];
 
         if(month<10){
             month=month.split("0");
@@ -321,7 +269,7 @@
         dateSelected=year+":"+month+":"+day;
         console.log(dateSelected);
 
-        firebase.database().ref().child('TK').child(trackerId).orderByChild("date").equalTo(String(dateSelected)).on("value", function(snapshot) {
+        firebase.database().ref().child('TK').child(trackerId1).orderByChild("date").equalTo(String(dateSelected)).on("value", function(snapshot) {
             if (snapshot.exists()) {
                 console.log(snapshot.val());
                 var data= snapshot.val();
@@ -330,22 +278,24 @@
 
                         let latVal=child.val().lat;
                         let longVal=child.val().long;
-                        latVal=String(latVal);
-                        latVal=latVal.split(".");
-                        let latInt= latVal[0];
-                        let latFloat= latVal[1];
-                        latFloat=latFloat.substr(0,4);
-                        latVal=latInt+"."+latFloat;
-                        latVal=parseFloat(latVal);
 
-                        //reduce long value to four decimal points
-                        longVal=String(longVal);
-                        longVal=longVal.split(".");
-                        let longInt= longVal[0];
-                        let longFloat= longVal[1];
-                        longFloat=longFloat.substr(0,4);
-                        longVal=longInt+"."+longFloat;
-                        longVal=parseFloat(longVal);
+                        //no need to reduce since found radius
+                        // latVal=String(latVal);
+                        // latVal=latVal.split(".");
+                        // let latInt= latVal[0];
+                        // let latFloat= latVal[1];
+                        // latFloat=latFloat.substr(0,4);
+                        // latVal=latInt+"."+latFloat;
+                        // latVal=parseFloat(latVal);
+                        //
+                        // //reduce long value to four decimal points
+                        // longVal=String(longVal);
+                        // longVal=longVal.split(".");
+                        // let longInt= longVal[0];
+                        // let longFloat= longVal[1];
+                        // longFloat=longFloat.substr(0,4);
+                        // longVal=longInt+"."+longFloat;
+                        // longVal=parseFloat(longVal);
 
                         console.log("Lat:"+latVal+" Long:"+longVal);
                         console.log("---------------------------------------------------------------");
@@ -360,7 +310,6 @@
                 for (let j = 0; j < historyLatArrayForCB.length; j++)
                 {
                     console.log("Long:"+historyLongArrayForCB[j]+" Lat:"+historyLatArrayForCB[j]);
-                    // console.log("Lat:"+longArrayForCB[j]+" Long:"+latArrayForCB[j]+" Frequency:"+locFrequency[j]);
                 }
                 console.log("***************************************************");
                 console.log(historyLatArrayForCB.length+" is history array length");
@@ -424,10 +373,188 @@
                 let heatmapCB = new google.maps.visualization.HeatmapLayer({
                     data: heatMapArrayForCB
                 });
+                heatmapCB.set("gradient", heatmapCB.get("gradient") ? null : gradient);
+                heatmapCB.set("radius", heatmapCB.get("radius") ? null : 25);
                 heatmapCB.setMap(mapCB);
+
+
+                let heatMapArrayForCB2 = [
+                    {location: new google.maps.LatLng(6.870391, 79.944068), weight: 3},
+                    {location: new google.maps.LatLng(6.870358, 79.944060), weight: 3},
+                    {location: new google.maps.LatLng(6.870359, 79.944065), weight: 2},
+                    {location: new google.maps.LatLng(6.870256, 79.944068), weight: 5},
+                    {location: new google.maps.LatLng(6.870458, 79.944088), weight: 1},
+                    {location: new google.maps.LatLng(6.870854, 79.944058), weight: 0.5}
+                ];
+
+                let heatmapCB2 = new google.maps.visualization.HeatmapLayer({
+                    data: heatMapArrayForCB2
+                });
+
+                heatmapCB2.set("radius", heatmapCB2.get("radius") ? null : 25);
+                heatmapCB2.setMap(mapCB);
+
             }
             else
+
                 console.log("data not retrieved or no data");
+        });
+
+    }
+
+    window.processConsumption=function(){
+
+        var dateSelected = document.getElementById('selectdate2').value;
+        console.log(String(dateSelected));
+        var animal = document.getElementById('select_consumer').value;
+        console.log(String(animal));
+        var trackerId;
+        if(animal=="Terrestial Tracker 1")
+            trackerId="TKT1";
+        else if(animal=="Terrestial Tracker 2")
+            trackerId="TKT2";
+        else if(animal=="Marine Tracker")
+            trackerId="TKM1";
+        else if(animal=="Aerial Tracker")
+            trackerId="TKA1";
+
+        console.log(trackerId);
+        var splt= dateSelected.split(":");
+        var year=splt[0];
+        var month= splt[1];
+        var day=splt[2];
+
+        var historyLongArrayForCP=[];
+        var historyLatArrayForCP=[];
+        var longArrayForCP=[];
+        var latArrayForCP=[];
+        var locFrequencyCP=[];
+        var heatMapArrayForCP=[];
+        var mapCP;
+        var heatmapCP;
+
+
+        if(month<10){
+            month=month.split("0");
+            month=month[1];
+        }
+
+        if(day<10){
+            day=day.split("0");
+            day=day[1];
+        }
+        dateSelected=year+":"+month+":"+day;
+        console.log(dateSelected);
+
+        firebase.database().ref().child('TK').child(trackerId).orderByChild("date").equalTo(String(dateSelected)).on("value", function(snapshot) {
+            if (snapshot.exists()) {
+                console.log(snapshot.val());
+                var data= snapshot.val();
+                snapshot.forEach((child) => {
+                    if(child.val().lat!=0 && child.val().consumption!=0){
+                    let latVal=child.val().lat;
+                    let longVal=child.val().long;
+
+                    console.log("Lat:"+latVal+" Long:"+longVal);
+                    console.log("---------------------------------------------------------------");
+                    historyLatArrayForCP.push(latVal);
+                    historyLongArrayForCP.push(longVal);
+                }
+                if(historyLatArrayForCP.length==0){
+                    mapCP = new google.maps.Map(document.getElementById('cpMap'), {
+                        center: { lat: 7.8731, lng: 80.7718 },
+                        zoom: 8,
+                        mapTypeId: 'satellite'
+                    });
+
+                    heatmapCP.setMap(null);
+                    console.log("There's no proper data");
+                }
+            });
+
+                console.log("***************************************************");
+                for (let j = 0; j < historyLatArrayForCP.length; j++)
+                {
+                    console.log("Long:"+historyLongArrayForCP[j]+" Lat:"+historyLatArrayForCP[j]);
+                }
+                console.log("***************************************************");
+                console.log(historyLatArrayForCP.length+" is history array length");
+
+
+                for (let i = 0; i < historyLatArrayForCP.length; i++)
+                {
+                    if(i==0)
+                    {
+                        locFrequencyCP.push(1);
+                        longArrayForCP.push(historyLongArrayForCP[i]);
+                        latArrayForCP.push(historyLatArrayForCP[i]);
+                    }
+                    else
+                    {
+                        let found=0;
+                        for(let j=0;j<locFrequencyCP.length;j++)
+                        {
+                            if(historyLongArrayForCP[i]===longArrayForCP[j] && historyLatArrayForCP[i]===latArrayForCP[j])
+                            {
+                                locFrequencyCP[j]++;
+                                found=1;
+                            }
+                            if(j==(locFrequencyCP.length-1) && found==0){
+                                locFrequencyCP.push(0);
+                                longArrayForCP.push(historyLongArrayForCP[i]);
+                                latArrayForCP.push(historyLatArrayForCP[i]);
+                            }
+                        }
+                    }
+                }
+
+                let max_of_freq = Math.max.apply(Math, locFrequencyCP);
+                let min_of_freq = Math.min.apply(Math, locFrequencyCP);
+                let lastLat;
+                let lastLong;
+                console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                for (let j = 0; j < longArrayForCP.length; j++)
+                {
+                    console.log("Long:"+longArrayForCP[j]+" Lat:"+latArrayForCP[j]+" Frequency:"+locFrequencyCP[j]);
+                    let value = locFrequencyCP[j];
+                    let mappedValue = map(value, min_of_freq, max_of_freq, 0.5, 5);
+                    console.log("mapped value:"+mappedValue);
+                    heatMapArrayForCP[j]={location: new google.maps.LatLng(+latArrayForCP[j], longArrayForCP[j]), weight: mappedValue};
+                    console.log(heatMapArrayForCP[j]);
+
+                    lastLat=latArrayForCP[j];
+                    lastLong=longArrayForCP[j];
+                }
+                console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+                let mapCenterLocationForCP = new google.maps.LatLng(lastLat, lastLong);
+
+                mapCP = new google.maps.Map(document.getElementById('cpMap'), {
+                    center: mapCenterLocationForCP,
+                    zoom: 18,
+                    mapTypeId: 'satellite'
+                });
+
+                heatmapCP = new google.maps.visualization.HeatmapLayer({
+                    data: heatMapArrayForCP
+                });
+
+                heatmapCP.set("radius", heatmapCP.get("radius") ? null : 25);
+                heatmapCP.setMap(mapCP);
+
+            }
+            else{
+                mapCP = new google.maps.Map(document.getElementById('cpMap'), {
+                    center: { lat: 7.8731, lng: 80.7718 },
+                    zoom: 8,
+                    mapTypeId: 'satellite'
+                });
+
+                heatmapCP.setMap(null);
+                console.log("data not retrieved or no data");
+            }
+
+
         });
 
     }
@@ -443,7 +570,21 @@
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8BbO_t_LXJLuBuHLnRMvXBJH8_S7q2IM&libraries=visualization&callback=initMap">
 </script>
 
+
+
+
+
+
 <script>
+
+
+    // window.swal({
+    //     type: 'error',
+    //     title: 'Oops...',
+    //     text: 'You can\'t choose the same animal to compare with',
+    //     padding: '2em'
+    // });
+
     $( document ).ready(function() {
         let dateCB = flatpickr(document.getElementById('selectdate1'), {
             dateFormat: "Y:m:d"
@@ -468,12 +609,31 @@
         //     }
         // });
 
+        //compare animal behavior
         $("#selectdate1").change(function changeSession() {
-            getData();
+            var animal1 = document.getElementById('select_cb_1').value;
+            var animal2 = document.getElementById('select_cb_2').value;
+            if(animal1==animal2){
+
+            }
+            else
+                processBehavior();
         });
 
-        $("#select1").change(function changeSession() {
-            getData();
+        $("#select_cb_1").change(function changeSession() {
+            processBehavior();
         });
+
+        //animal consumption
+        $("#selectdate2").change(function changeSession() {
+            processConsumption();
+        });
+
+        $("#select_consumer").change(function changeSession() {
+            processConsumption();
+        });
+
+
+
     });
 </script>
