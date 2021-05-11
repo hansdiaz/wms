@@ -85,6 +85,7 @@
                                                    <option>Aerial Tracker</option>
                                                 </select>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -215,19 +216,34 @@
 
         var dateSelected = document.getElementById('selectdate1').value;
         console.log(String(dateSelected));
-        var animal = document.getElementById('select_cb_1').value;
-        console.log(String(animal));
+        var animal1 = document.getElementById('select_cb_1').value;
+        var animal2 = document.getElementById('select_cb_2').value;
+
         var trackerId1;
-        if(animal=="Terrestial Tracker 1")
+        var trackerId2;
+        //set the trackercode to first param
+        if(animal1=="Terrestial Tracker 1")
             trackerId1="TKT1";
-        else if(animal=="Terrestial Tracker 2")
+        else if(animal1=="Terrestial Tracker 2")
             trackerId1="TKT2";
-        else if(animal=="Marine Tracker")
+        else if(animal1=="Marine Tracker")
             trackerId1="TKM1";
-        else if(animal=="Aerial Tracker")
+        else if(animal1=="Aerial Tracker")
             trackerId1="TKA1";
 
+        //set the trackercode to second param
+        if(animal2=="Terrestial Tracker 1")
+            trackerId2="TKT1";
+        else if(animal2=="Terrestial Tracker 2")
+            trackerId2="TKT2";
+        else if(animal2=="Marine Tracker")
+            trackerId2="TKM1";
+        else if(animal2=="Aerial Tracker")
+            trackerId2="TKA1";
+
         console.log(trackerId1);
+        console.log(trackerId2);
+
         var splt= dateSelected.split(":");
         var year=splt[0];
         var month= splt[1];
@@ -239,6 +255,15 @@
         var latArrayForCB=[];
         var locFrequency=[];
         var heatMapArrayForCB=[];
+        var heatmapCB=null;
+
+        var historyLongArrayForCB2=[];
+        var historyLatArrayForCB2=[];
+        var longArrayForCB2=[];
+        var latArrayForCB2=[];
+        var locFrequency2=[];
+        var heatMapArrayForCB2=[];
+        var heatmapCB2=null;
 
         const gradient = [
             "rgba(0, 255, 255, 0)",
@@ -272,36 +297,19 @@
         firebase.database().ref().child('TK').child(trackerId1).orderByChild("date").equalTo(String(dateSelected)).on("value", function(snapshot) {
             if (snapshot.exists()) {
                 console.log(snapshot.val());
-                var data= snapshot.val();
+
                 snapshot.forEach((child) => {
                     if(child.val().lat!=0){
-
                         let latVal=child.val().lat;
                         let longVal=child.val().long;
-
-                        //no need to reduce since found radius
-                        // latVal=String(latVal);
-                        // latVal=latVal.split(".");
-                        // let latInt= latVal[0];
-                        // let latFloat= latVal[1];
-                        // latFloat=latFloat.substr(0,4);
-                        // latVal=latInt+"."+latFloat;
-                        // latVal=parseFloat(latVal);
-                        //
-                        // //reduce long value to four decimal points
-                        // longVal=String(longVal);
-                        // longVal=longVal.split(".");
-                        // let longInt= longVal[0];
-                        // let longFloat= longVal[1];
-                        // longFloat=longFloat.substr(0,4);
-                        // longVal=longInt+"."+longFloat;
-                        // longVal=parseFloat(longVal);
 
                         console.log("Lat:"+latVal+" Long:"+longVal);
                         console.log("---------------------------------------------------------------");
                         historyLatArrayForCB.push(latVal);
                         historyLongArrayForCB.push(longVal);
 
+                    }else{
+                        //no data load to main map code
                     }
 
                 });
@@ -362,6 +370,8 @@
                 }
                 console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
+                //apply heat map
+
                 let mapCenterLocationForCB = new google.maps.LatLng(lastLat, lastLong);
 
                 let mapCB = new google.maps.Map(document.getElementById('cbMap'), {
@@ -370,7 +380,7 @@
                     mapTypeId: 'satellite'
                 });
 
-                let heatmapCB = new google.maps.visualization.HeatmapLayer({
+                heatmapCB = new google.maps.visualization.HeatmapLayer({
                     data: heatMapArrayForCB
                 });
                 heatmapCB.set("gradient", heatmapCB.get("gradient") ? null : gradient);
@@ -378,27 +388,226 @@
                 heatmapCB.setMap(mapCB);
 
 
-                let heatMapArrayForCB2 = [
-                    {location: new google.maps.LatLng(6.870391, 79.944068), weight: 3},
-                    {location: new google.maps.LatLng(6.870358, 79.944060), weight: 3},
-                    {location: new google.maps.LatLng(6.870359, 79.944065), weight: 2},
-                    {location: new google.maps.LatLng(6.870256, 79.944068), weight: 5},
-                    {location: new google.maps.LatLng(6.870458, 79.944088), weight: 1},
-                    {location: new google.maps.LatLng(6.870854, 79.944058), weight: 0.5}
-                ];
+                firebase.database().ref().child('TK').child(trackerId2).orderByChild("date").equalTo(String(dateSelected)).on("value", function(snapshot) {
+                    if (snapshot.exists()) {
+                        console.log(snapshot.val());
 
-                let heatmapCB2 = new google.maps.visualization.HeatmapLayer({
-                    data: heatMapArrayForCB2
+                        snapshot.forEach((child) => {
+                            if(child.val().lat!=0){
+                            let latVal2=child.val().lat;
+                            let longVal2=child.val().long;
+
+                            console.log("Lat:"+latVal2+" Long:"+longVal2);
+                            console.log("---------------------------------------------------------------");
+                            historyLatArrayForCB2.push(latVal2);
+                            historyLongArrayForCB2.push(longVal2);
+
+                        }else{
+                            //no data load to main map code
+                            mapCP = new google.maps.Map(document.getElementById('cpMap'), {
+                                center: { lat: 7.8731, lng: 80.7718 },
+                                zoom: 8,
+                                mapTypeId: 'satellite'
+                            });
+
+                            // heatmapCB.setMap(null);
+                            // heatmapCB2.setMap(null);
+                            console.log("data not retrieved or no data");
+                            //code to load data back to main map comes here
+                        }
+
+                    });
+
+                        console.log("***************************************************");
+                        for (let jj = 0; jj < historyLatArrayForCB2.length; jj++)
+                        {
+                            console.log("Long:"+historyLongArrayForCB2[jj]+" Lat:"+historyLatArrayForCB2[jj]);
+                        }
+                        console.log("***************************************************");
+                        console.log(historyLatArrayForCB2.length+" is history array length");
+
+
+                        for (let ij = 0; ij < historyLatArrayForCB2.length; ij++)
+                        {
+                            if(ij==0)
+                            {
+                                locFrequency2.push(1);
+                                longArrayForCB2.push(historyLongArrayForCB2[ij]);
+                                latArrayForCB2.push(historyLatArrayForCB2[ij]);
+                            }
+                            else
+                            {
+                                let found2=0;
+                                for(let ji=0;ji<locFrequency2.length;ji++)
+                                {
+                                    if(historyLongArrayForCB2[ij]===longArrayForCB2[ji] && historyLatArrayForCB2[ij]===latArrayForCB2[ji])
+                                    {
+                                        locFrequency2[ji]++;
+                                        found2=1;
+                                    }
+                                    if(ji==(locFrequency2.length-1) && found2==0){
+                                        locFrequency2.push(0);
+                                        longArrayForCB2.push(historyLongArrayForCB2[ij]);
+                                        latArrayForCB2.push(historyLatArrayForCB2[ij]);
+                                    }
+                                }
+                            }
+                        }
+
+
+                        let max_of_freq2 = Math.max.apply(Math, locFrequency2);
+                        let min_of_freq2 = Math.min.apply(Math, locFrequency2);
+                        let lastLat2;
+                        let lastLong2;
+                        console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                        for (let ji = 0; ji < longArrayForCB2.length; ji++)
+                        {
+                            console.log("Long:"+longArrayForCB2[ji]+" Lat:"+latArrayForCB2[ji]+" Frequency:"+locFrequency2[ji]);
+                            let value2 = locFrequency2[ji];
+                            let mappedValue2 = map(value2, min_of_freq2, max_of_freq2, 0.5, 5);
+                            console.log("mapped value:"+mappedValue2);
+                            heatMapArrayForCB2[ji]={location: new google.maps.LatLng(+latArrayForCB2[ji], longArrayForCB2[ji]), weight: mappedValue2};
+                            console.log(heatMapArrayForCB2[ji]);
+
+                            lastLat=latArrayForCB2[ji];
+                            lastLong=longArrayForCB2[ji];
+                        }
+                        console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+
+
+                        heatmapCB2 = new google.maps.visualization.HeatmapLayer({
+                            data: heatMapArrayForCB2
+                        });
+
+                        heatmapCB2.set("radius", heatmapCB2.get("radius") ? null : 25);
+                        heatmapCB2.setMap(mapCB);
+
+                    }
+                    else{
+
+                        console.log("data not retrieved or no data");
+                        //code to load data back to main map comes here
+                    }
+                });
+            }
+            else{
+
+                console.log("There's no proper data");
+
+                firebase.database().ref().child('TK').child(trackerId2).orderByChild("date").equalTo(String(dateSelected)).on("value", function(snapshot) {
+                    if (snapshot.exists()) {
+                        console.log(snapshot.val());
+
+                        snapshot.forEach((child) => {
+                            if(child.val().lat!=0){
+                            let latVal2=child.val().lat;
+                            let longVal2=child.val().long;
+
+                            console.log("Lat:"+latVal2+" Long:"+longVal2);
+                            console.log("---------------------------------------------------------------");
+                            historyLatArrayForCB2.push(latVal2);
+                            historyLongArrayForCB2.push(longVal2);
+
+                        }else{
+                            //no data load to main map code
+                            mapCP = new google.maps.Map(document.getElementById('cpMap'), {
+                                center: { lat: 7.8731, lng: 80.7718 },
+                                zoom: 8,
+                                mapTypeId: 'satellite'
+                            });
+
+                            // heatmapCB.setMap(null);
+                            // heatmapCB2.setMap(null);
+                            console.log("data not retrieved or no data");
+                            //code to load data back to main map comes here
+                        }
+
+                    });
+
+                        console.log("***************************************************");
+                        for (let jj = 0; jj < historyLatArrayForCB2.length; jj++)
+                        {
+                            console.log("Long:"+historyLongArrayForCB2[jj]+" Lat:"+historyLatArrayForCB2[jj]);
+                        }
+                        console.log("***************************************************");
+                        console.log(historyLatArrayForCB2.length+" is history array length");
+
+
+                        for (let ij = 0; ij < historyLatArrayForCB2.length; ij++)
+                        {
+                            if(ij==0)
+                            {
+                                locFrequency2.push(1);
+                                longArrayForCB2.push(historyLongArrayForCB2[ij]);
+                                latArrayForCB2.push(historyLatArrayForCB2[ij]);
+                            }
+                            else
+                            {
+                                let found2=0;
+                                for(let ji=0;ji<locFrequency2.length;ji++)
+                                {
+                                    if(historyLongArrayForCB2[ij]===longArrayForCB2[ji] && historyLatArrayForCB2[ij]===latArrayForCB2[ji])
+                                    {
+                                        locFrequency2[ji]++;
+                                        found2=1;
+                                    }
+                                    if(ji==(locFrequency2.length-1) && found2==0){
+                                        locFrequency2.push(0);
+                                        longArrayForCB2.push(historyLongArrayForCB2[ij]);
+                                        latArrayForCB2.push(historyLatArrayForCB2[ij]);
+                                    }
+                                }
+                            }
+                        }
+
+
+                        let max_of_freq2 = Math.max.apply(Math, locFrequency2);
+                        let min_of_freq2 = Math.min.apply(Math, locFrequency2);
+                        let lastLat2;
+                        let lastLong2;
+                        console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                        for (let ji = 0; ji < longArrayForCB2.length; ji++)
+                        {
+                            console.log("Long:"+longArrayForCB2[ji]+" Lat:"+latArrayForCB2[ji]+" Frequency:"+locFrequency2[ji]);
+                            let value2 = locFrequency2[ji];
+                            let mappedValue2 = map(value2, min_of_freq2, max_of_freq2, 0.5, 5);
+                            console.log("mapped value:"+mappedValue2);
+                            heatMapArrayForCB2[ji]={location: new google.maps.LatLng(+latArrayForCB2[ji], longArrayForCB2[ji]), weight: mappedValue2};
+                            console.log(heatMapArrayForCB2[ji]);
+
+                            lastLat=latArrayForCB2[ji];
+                            lastLong=longArrayForCB2[ji];
+                        }
+                        console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+
+                        let mapCenterLocationForCB = new google.maps.LatLng(lastLat, lastLong);
+
+                        let mapCB = new google.maps.Map(document.getElementById('cbMap'), {
+                            center: mapCenterLocationForCB,
+                            zoom: 18,
+                            mapTypeId: 'satellite'
+                        });
+
+                        heatmapCB2 = new google.maps.visualization.HeatmapLayer({
+                            data: heatMapArrayForCB2
+                        });
+
+                        heatmapCB2.set("radius", heatmapCB2.get("radius") ? null : 25);
+                        heatmapCB2.setMap(mapCB);
+
+                    }
+                    else{
+
+                        console.log("data not retrieved or no data");
+                        //code to load data back to main map comes here
+                    }
                 });
 
-                heatmapCB2.set("radius", heatmapCB2.get("radius") ? null : 25);
-                heatmapCB2.setMap(mapCB);
-
             }
-            else
-
-                console.log("data not retrieved or no data");
         });
+
 
     }
 
@@ -577,14 +786,6 @@
 
 <script>
 
-
-    // window.swal({
-    //     type: 'error',
-    //     title: 'Oops...',
-    //     text: 'You can\'t choose the same animal to compare with',
-    //     padding: '2em'
-    // });
-
     $( document ).ready(function() {
         let dateCB = flatpickr(document.getElementById('selectdate1'), {
             dateFormat: "Y:m:d"
@@ -610,7 +811,7 @@
         // });
 
         //compare animal behavior
-        $("#selectdate1").change(function changeSession() {
+        $("#selectdate1").change(function changeSession1() {
             var animal1 = document.getElementById('select_cb_1').value;
             var animal2 = document.getElementById('select_cb_2').value;
             if(animal1==animal2){
@@ -620,20 +821,18 @@
                 processBehavior();
         });
 
-        $("#select_cb_1").change(function changeSession() {
+        $("#select_cb_1").change(function changeSession2() {
             processBehavior();
         });
 
         //animal consumption
-        $("#selectdate2").change(function changeSession() {
+        $("#selectdate2").change(function changeSession3() {
             processConsumption();
         });
 
-        $("#select_consumer").change(function changeSession() {
+        $("#select_consumer").change(function changeSession4() {
             processConsumption();
         });
-
-
 
     });
 </script>
