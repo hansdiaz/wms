@@ -119,19 +119,19 @@
                                 <div class="tab-pane fade" id="rainfall_and_soil" role="tabpanel" aria-labelledby="justify-center-pills-contact-tab">
                                     <div class="row">
                                         <div class="col-lg-9">
-                                            <div id="rsMap" style="height: 700px"></div>
-                                            <br/>
+                                            <div id="simpleAreaChart" style="height: 200px;" class=""></div>
                                         </div>
                                         <div class="col-lg-3">
+                                            <br/><br/>
                                             <div class="form-group mb-0">
                                                 <input id="selectdate3" name="selectdate3" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
                                             </div>
                                             <br/>
                                             <div class="form-group mb-0">
-                                                <select class="form-control basic">
-                                                    <option selected="selected">Select Parameter</option>
-                                                    <option>Rainfall Frequency</option>
-                                                    <option>Soil Health</option>
+                                                <select id="cmbRSParameters" name="cmbRSParameters" class="form-control basic">
+                                                    <option value="RF">Rainfall Frequency</option>
+                                                    <option value="SS">Soil Saturation</option>
+                                                    <option value="RP">Rainfall Proximity</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -174,8 +174,133 @@
 <!--<script type="text/javascript" src="/javascripts/map-picker.js"></script>-->
 <!--<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyB8BbO_t_LXJLuBuHLnRMvXBJH8_S7q2IM&callback=initMap" async></script>-->
 <script>
-    function initMap()
-    {
+
+    let chartData;
+    let chart = null;
+
+    function alert(message){
+        swal({
+            type: 'error',
+            title: 'Oops...',
+            text: message,
+            footer: '',
+            padding: '2em'
+        })
+    }
+
+    function createChartData(date, type){
+
+        let split_date= date.split(":");
+        let year=split_date[0];
+        let month= split_date[1];
+        let day=split_date[2];
+
+        if(month<10){
+            month=month.split("0");
+            month=month[1];
+        }
+
+        if(day<10){
+            day=day.split("0");
+            day=day[1];
+        }
+        newDate = year+":"+month+":"+day;
+
+        let chartDataArray = [];
+
+        let demoArrayY = [];
+        let demoArrayX = [];
+        let xLabel = "";
+
+        firebase.database().ref().child('RG').child('RG1').orderByChild("date").equalTo(String(newDate)).once("value", function(snapshot) {
+            if (snapshot.exists()) {
+                snapshot.forEach((child) => {
+                    if(type === "RF"){
+                        chartDataArray.push(child.val().minutecount);
+                        xLabel = "Rainfall Frequency";
+                    }
+
+                    if(type === "SS"){
+                        chartDataArray.push(100-child.val().soildry);
+                        xLabel = "Soil Saturation";
+                    }
+
+                    if(type === "RP"){
+                        chartDataArray.push(100-child.val().weatherdry);
+                        xLabel = "Rainfall Proximity";
+                    }
+                });
+
+                let map = chartDataArray.reduce(function(prev, cur) {
+                    prev[cur] = (prev[cur] || 0) + 1;
+                    return prev;
+                }, {});
+
+                for (key in map) {
+                    if (map.hasOwnProperty(key)) {
+                        demoArrayX.push(key);
+                        demoArrayY.push(Number(map[key]));
+                    }
+                }
+
+                populateChart(demoArrayX, demoArrayY, xLabel);
+
+            }
+            else{
+                console.log("There's no proper data");
+                alert("There's no proper data.");
+            }
+        });
+    }
+
+    function populateChart(xAxis, yAxis, xLabel){
+        if(chart != null){
+            chart.clear();
+        }
+
+        chartData = {
+            chart: {
+                height: 450,
+                type: 'area',
+                toolbar: {
+                    show: false,
+                }
+            },
+            dataLabels: {
+                enabled: true
+            },
+            stroke: {
+                curve: 'smooth'
+            },
+            series: [{
+                name: 'Frequency',
+                data: yAxis
+            }],
+
+            xaxis: {
+                title: {
+                    text: xLabel
+                },
+                type: 'category',
+                categories: xAxis
+            },
+            yaxis: {
+                title: {
+                    text: "Frequency"
+                }
+            }
+        }
+
+        chart = new ApexCharts(
+            document.querySelector("#simpleAreaChart"),
+            chartData
+        );
+
+
+        chart.render();
+    }
+
+    function initMap(){
         //Start Div Compare Behavior Map//
 
         let mapCB = new google.maps.Map(document.getElementById("cbMap"), {
@@ -193,15 +318,6 @@
             mapTypeId: 'satellite'
         });
         //End Div Consumption Patterns Map//
-
-        //Start Div Rainfall and Soil Map//
-
-        let mapRS = new google.maps.Map(document.getElementById("rsMap"), {
-            center: { lat: 7.8731, lng: 80.7718 },
-            zoom: 8,
-            mapTypeId: 'satellite'
-        });
-        //End Div Rainfall and Soil Map//
 
         //Start Div Waterbody Status Map//
         let mapWS = new google.maps.Map(document.getElementById("wsMap"), {
@@ -494,6 +610,7 @@
             else{
 
                 console.log("There's no proper data");
+                alert("There's no proper data.");
 
                 firebase.database().ref().child('TK').child(trackerId2).orderByChild("date").equalTo(String(dateSelected)).on("value", function(snapshot) {
                     if (snapshot.exists()) {
@@ -602,6 +719,7 @@
 
                         console.log("data not retrieved or no data");
                         //code to load data back to main map comes here
+                        alert("Data not retrieved or no data.");
                     }
                 });
 
@@ -678,6 +796,7 @@
 
                     heatmapCP.setMap(null);
                     console.log("There's no proper data");
+                    alert("There's no proper data.");
                 }
             });
 
@@ -761,6 +880,7 @@
 
                 heatmapCP.setMap(null);
                 console.log("data not retrieved or no data");
+                alert("Data not retrieved or no data!");
             }
 
 
@@ -787,6 +907,7 @@
 <script>
 
     $( document ).ready(function() {
+
         let dateCB = flatpickr(document.getElementById('selectdate1'), {
             dateFormat: "Y:m:d"
         });
@@ -801,14 +922,6 @@
         let dateWS = flatpickr(document.getElementById('selectdate4'), {
             dateFormat: "Y:m:d"
         });
-
-        // firebase.database().ref().child('TK').child('TKA1').get().then((snapshot) => {
-        //     if (snapshot.exists()) {
-        //         console.log(snapshot.val());
-        //     }else{
-        //
-        //     }
-        // });
 
         //compare animal behavior
         $("#selectdate1").change(function changeSession1() {
@@ -833,6 +946,16 @@
         $("#select_consumer").change(function changeSession4() {
             processConsumption();
         });
+
+        $("#selectdate3").change(function() {
+            createChartData(this.value, $('#cmbRSParameters').find(":selected").val())
+        });
+
+        $("#cmbRSParameters").change(function() {
+            createChartData($('#selectdate3').val(), this.value)
+        });
+
+
 
     });
 </script>
