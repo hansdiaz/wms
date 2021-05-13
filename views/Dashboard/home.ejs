@@ -134,6 +134,13 @@
                                                     <option value="RP">Rainfall Proximity</option>
                                                 </select>
                                             </div>
+                                            <br/>
+                                            <div class="form-group mb-0">
+                                                <select id="cmbRSDevice" name="cmbRSDevice" class="form-control basic">
+                                                    <option value="RG1">RG1</option>
+                                                    <option value="RG2">RG2</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -141,8 +148,7 @@
                                 <div class="tab-pane fade" id="waterbody_status" role="tabpanel" aria-labelledby="justify-center-pills-contact-tab">
                                     <div class="row">
                                         <div class="col-lg-9">
-                                            <div id="wsMap" style="height: 700px"></div>
-                                            <br/>
+                                            <div id="simpleWSAreaChart" style="height: 200px;" class=""></div>
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="form-group mb-0">
@@ -150,10 +156,16 @@
                                             </div>
                                             <br/>
                                             <div class="form-group mb-0">
-                                                <select class="form-control basic">
-                                                    <option selected="selected">Select Parameter</option>
-                                                    <option>Water PH Quality</option>
-                                                    <option>Water Temperature</option>
+                                                <select id="cmbWSParameters" name="cmbWSParameters" class="form-control basic">
+                                                    <option value="WPH">Water PH Quality</option>
+                                                    <option value="WTEMP">Water Temperature</option>
+                                                </select>
+                                            </div>
+                                            <br/>
+                                            <div class="form-group mb-0">
+                                                <select id="cmbWSDevice" name="cmbWSDevice" class="form-control basic">
+                                                    <option value="WB1">WB1</option>
+                                                    <option value="WB2">WB2</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -170,13 +182,13 @@
     </div>
 </div>
 
-
-<!--<script type="text/javascript" src="/javascripts/map-picker.js"></script>-->
-<!--<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyB8BbO_t_LXJLuBuHLnRMvXBJH8_S7q2IM&callback=initMap" async></script>-->
 <script>
 
-    let chartData;
-    let chart = null;
+    let chartRSData;
+    let chartRS = null;
+
+    let chartWSData;
+    let chartWS = null;
 
     function alert(message){
         swal({
@@ -188,7 +200,7 @@
         })
     }
 
-    function createChartData(date, type){
+    function createRSChartData(date, type, device){
 
         let split_date= date.split(":");
         let year=split_date[0];
@@ -212,7 +224,7 @@
         let demoArrayX = [];
         let xLabel = "";
 
-        firebase.database().ref().child('RG').child('RG1').orderByChild("date").equalTo(String(newDate)).once("value", function(snapshot) {
+        firebase.database().ref().child('RG').child(device).orderByChild("date").equalTo(String(newDate)).once("value", function(snapshot) {
             if (snapshot.exists()) {
                 snapshot.forEach((child) => {
                     if(type === "RF"){
@@ -253,12 +265,75 @@
         });
     }
 
-    function populateChart(xAxis, yAxis, xLabel){
-        if(chart != null){
-            chart.clear();
+    function createWSChartData(date, type, device){
+
+        let split_date= date.split(":");
+        let year=split_date[0];
+        let month= split_date[1];
+        let day=split_date[2];
+
+        if(month<10){
+            month=month.split("0");
+            month=month[1];
         }
 
-        chartData = {
+        if(day<10){
+            day=day.split("0");
+            day=day[1];
+        }
+        newDate = year+":"+month+":"+day;
+
+        let chartDataArray = [];
+
+        let demoArrayY = [];
+        let demoArrayX = [];
+        let xLabel = "";
+
+        firebase.database().ref().child('WB').child(device).orderByChild("date").equalTo(String(newDate)).once("value", function(snapshot) {
+            if (snapshot.exists()) {
+                snapshot.forEach((child) => {
+                    if(type === "WPH"){
+                        chartDataArray.push(child.val().ph);
+                        xLabel = "Water PH Quality";
+                    }
+
+                    if(type === "WTEMP"){
+                        chartDataArray.push(child.val().temperature);
+                        xLabel = "Water Temperature";
+                    }
+
+                });
+
+                let map = chartDataArray.reduce(function(prev, cur) {
+                    prev[cur] = (prev[cur] || 0) + 1;
+                    return prev;
+                }, {});
+
+                console.log(map);
+
+                for (key in map) {
+                    if (map.hasOwnProperty(key)) {
+                        demoArrayX.push(key);
+                        demoArrayY.push(Number(map[key]).toPrecision(2));
+                    }
+                }
+
+                populateWSChart(demoArrayX, demoArrayY, xLabel);
+
+            }
+            else{
+                console.log("There's no proper data");
+                alert("There's no proper data.");
+            }
+        });
+    }
+
+    function populateChart(xAxis, yAxis, xLabel){
+        if(chartRS != null){
+            chartRS.clear();
+        }
+
+        chartRSData = {
             chart: {
                 height: 450,
                 type: 'area',
@@ -291,13 +366,60 @@
             }
         }
 
-        chart = new ApexCharts(
+        chartRS = new ApexCharts(
             document.querySelector("#simpleAreaChart"),
-            chartData
+            chartRSData
         );
 
 
-        chart.render();
+        chartRS.render();
+    }
+
+    function populateWSChart(xAxis, yAxis, xLabel){
+        if(chartWS != null){
+            chartWS.clear();
+        }
+
+        chartWSData = {
+            chart: {
+                height: 450,
+                type: 'area',
+                toolbar: {
+                    show: false,
+                }
+            },
+            dataLabels: {
+                enabled: true
+            },
+            stroke: {
+                curve: 'smooth'
+            },
+            series: [{
+                name: 'Frequency',
+                data: yAxis
+            }],
+
+            xaxis: {
+                title: {
+                    text: xLabel
+                },
+                type: 'category',
+                categories: xAxis
+            },
+            yaxis: {
+                title: {
+                    text: "Frequency"
+                }
+            }
+        }
+
+        chartWS = new ApexCharts(
+            document.querySelector("#simpleWSAreaChart"),
+            chartWSData
+        );
+
+
+        chartWS.render();
     }
 
     function initMap(){
@@ -317,15 +439,7 @@
             zoom: 8,
             mapTypeId: 'satellite'
         });
-        //End Div Consumption Patterns Map//
-
-        //Start Div Waterbody Status Map//
-        let mapWS = new google.maps.Map(document.getElementById("wsMap"), {
-            center: { lat: 7.8731, lng: 80.7718 },
-            zoom: 8,
-            mapTypeId: 'satellite'
-        });
-        //End Div Waterbody Status Map//
+        //End Div Consumption Patterns Map//x
     }
 
     window.processBehavior=function(){
@@ -426,6 +540,7 @@
 
                     }else{
                         //no data load to main map code
+                        alert("Data not retrieved or no data.");
                     }
 
                 });
@@ -530,6 +645,7 @@
                             // heatmapCB2.setMap(null);
                             console.log("data not retrieved or no data");
                             //code to load data back to main map comes here
+                                alert("Data not retrieved or no data.");
                         }
 
                     });
@@ -603,6 +719,7 @@
                     else{
 
                         console.log("data not retrieved or no data");
+                        alert("Data not retrieved or no data.");
                         //code to load data back to main map comes here
                     }
                 });
@@ -948,11 +1065,28 @@
         });
 
         $("#selectdate3").change(function() {
-            createChartData(this.value, $('#cmbRSParameters').find(":selected").val())
+            createRSChartData(this.value, $('#cmbRSParameters').find(":selected").val(), $('#cmbRSDevice').find(":selected").val())
         });
 
         $("#cmbRSParameters").change(function() {
-            createChartData($('#selectdate3').val(), this.value)
+            createRSChartData($('#selectdate3').val(), this.value, $('#cmbRSDevice').find(":selected").val())
+        });
+
+        $("#cmbRSDevice").change(function() {
+            createRSChartData($('#selectdate3').val(), $('#cmbRSParameters').find(":selected").val(), this.value)
+        });
+
+
+        $("#selectdate4").change(function() {
+            createWSChartData(this.value, $('#cmbWSParameters').find(":selected").val(), $('#cmbWSDevice').find(":selected").val())
+        });
+
+        $("#cmbWSParameters").change(function() {
+            createWSChartData($('#selectdate4').val(), this.value, $('#cmbWSDevice').find(":selected").val())
+        });
+
+        $("#cmbWSDevice").change(function() {
+            createWSChartData($('#selectdate4').val(), $('#cmbWSParameters').find(":selected").val(), this.value)
         });
 
 

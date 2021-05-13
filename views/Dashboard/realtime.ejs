@@ -1,3 +1,26 @@
+<script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-analytics.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-database.js"></script>
+
+<script>
+
+    var firebaseConfig = {
+        apiKey: "AIzaSyAId5U8P5nDEhytscOGupt7yymM9R0Gdsc",
+        authDomain: "wildlife-monitoring-system.firebaseapp.com",
+        databaseURL: "https://wildlife-monitoring-system-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "wildlife-monitoring-system",
+        storageBucket: "wildlife-monitoring-system.appspot.com",
+        messagingSenderId: "345584392239",
+        appId: "1:345584392239:web:1588fc68d350da6ecc4eda",
+        measurementId: "G-1MER911JKD"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+</script>
+
 <div class="layout-px-spacing">
 
     <div class="row layout-top-spacing">
@@ -12,7 +35,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="realTimeMap" style="height: 1000px; padding: 5px 10px 10px;"></div>
+                        <div class="row" >
+                            <div class="col-md-9">
+                                <div id="realTimeMap" style="height: 1000px; padding: 5px 10px 10px;"></div>
+                            </div>
+                            <div class="col-md-3">
+
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -24,48 +54,277 @@
 
 <script>
     let realTimeMap;
-    let markers = [];
+    let infoWindow = null;
+
+    let markers = []
 
     function initMap() {
         realTimeMap = new google.maps.Map(document.getElementById("realTimeMap"), {
-            zoom: 7,
+            zoom: 8,
             center: {
                 lat: 6.9271,
                 lng: 79.8612
             },
         });
 
-        let marker = {lat: 6.9271, lng: 79.8612};
-        addMarker(marker, realTimeMap);
     }
 
-    function addMarker(location, map) {
-        let marker = new google.maps.Marker({
-            position: location,
-            map: map
-        });
-        markers.push(marker);
-    }
+    function openWindow(map, marker, title, data, type){
 
-    function setMapOnAll(map) {
-        for (let i = 0; i < markers.length; i++) {
-            markers[i].setMap(map);
+        let contentString = null;
+
+        console.log(type);
+
+        if(type === 'RG'){
+            contentString =
+                '<div id="content">' +
+                '<h1 id="firstHeading" class="firstHeading">'+title+'</h1>' +
+                '<div id="bodyContent">' +
+                '<h5><b>Date</b> </h5>' +
+                '<h5><b>Latitude</b> </h5>' +
+                '<h5><b>Longitude</b> </h5>' +
+                '<h5><b>Minute Count</b> </h5>' +
+                '<h5><b>Soil Dry</b> </h5>' +
+                '<h5><b>Weather Dry</b> </h5>' +
+                "</div>" +
+                "</div>";
         }
+
+        if(type === 'SG'){
+            contentString =
+                '<div id="content">' +
+                '<h1 id="firstHeading" class="firstHeading">'+title+'</h1>' +
+                '<div id="bodyContent">' +
+                '<h5><b>Date</b> </h5>' +
+                '<h5><b>Latitude</b> </h5>' +
+                '<h5><b>Longitude</b> </h5>' +
+                '<h5><b>Minute Count</b> </h5>' +
+                '<h5><b>Soil Dry</b> </h5>' +
+                '<h5><b>Weather Dry</b> </h5>' +
+                "</div>" +
+                "</div>";
+        }
+
+        if(type === 'TK'){
+            contentString =
+                '<div id="content">' +
+                '<h1 id="firstHeading" class="firstHeading">'+title+'</h1>' +
+                '<div id="bodyContent">' +
+                '<h5><b>Date</b> </h5>' +
+                '<h5><b>Latitude</b> </h5>' +
+                '<h5><b>Longitude</b> </h5>' +
+                '<h5><b>Minute Count</b> </h5>' +
+                '<h5><b>Soil Dry</b> </h5>' +
+                '<h5><b>Weather Dry</b> </h5>' +
+                "</div>" +
+                "</div>";
+        }
+
+        if(type === 'WB'){
+            contentString =
+                '<div id="content">' +
+                '<h1 id="firstHeading" class="firstHeading">'+title+'</h1>' +
+                '<div id="bodyContent">' +
+                '<h5><b>Date</b> </h5>' +
+                '<h5><b>Latitude</b> </h5>' +
+                '<h5><b>Longitude</b> </h5>' +
+                '<h5><b>Minute Count</b> </h5>' +
+                '<h5><b>Soil Dry</b> </h5>' +
+                '<h5><b>Weather Dry</b> </h5>' +
+                "</div>" +
+                "</div>";
+        }
+
+
+
+        infoWindow = new google.maps.InfoWindow({
+            content: contentString,
+        });
+
+        infoWindow.open(map, marker);
     }
 
-    function clearMarkers() {
-        setMapOnAll(null);
+    function addMarker(id, location, map, title, data) {
+        let marker = new google.maps.Marker({
+            id: id,
+            position: location,
+            map: map,
+            title: title
+        });
+        marker.addListener("click", () => {
+            openWindow(map, marker, title, data);
+        });
+
+        markers[id] = marker;
     }
 
-    function showMarkers() {
-        setMapOnAll(map);
-    }
 
-    function deleteMarkers() {
-        clearMarkers();
-        markers = [];
+    function deleteMarker(id) {
+        let marker = markers[id];
+        console.log(marker);
+        if(marker !== undefined)
+            marker.setMap(null);
     }
 
 </script>
 <script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyB8BbO_t_LXJLuBuHLnRMvXBJH8_S7q2IM&callback=initMap" async></script>
 
+
+<script>
+    function doReal(){
+        firebase.database().ref().child('RG').child('RG1').limitToLast(1).on("value", function(snapshot) {
+            if (snapshot.exists()) {
+                snapshot.forEach((child) => {
+                    deleteMarker(0);
+                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
+                    addMarker(0, coordinateRG1, realTimeMap, 'RG1', child.val(), 'RG');
+                });
+            }
+            else{
+                console.log("There's no proper data");
+                alert("There's no proper data.");
+            }
+        });
+
+        firebase.database().ref().child('RG').child('RG2').limitToLast(1).on("value", function(snapshot) {
+            if (snapshot.exists()) {
+                snapshot.forEach((child) => {
+                    deleteMarker(1);
+                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
+                    addMarker(1, coordinateRG1, realTimeMap, 'RG2', child.val(), 'RG');
+                });
+            }
+            else{
+                console.log("There's no proper data");
+                alert("There's no proper data.");
+            }
+        });
+
+        firebase.database().ref().child('SG').child('SG1').limitToLast(1).on("value", function(snapshot) {
+            if (snapshot.exists()) {
+                snapshot.forEach((child) => {
+                    deleteMarker(2);
+                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
+                    addMarker(2, coordinateRG1, realTimeMap, 'SG1', child.val(), 'SG');
+                });
+            }
+            else{
+                console.log("There's no proper data");
+                alert("There's no proper data.");
+            }
+        });
+
+        firebase.database().ref().child('SG').child('SG2').limitToLast(1).on("value", function(snapshot) {
+            if (snapshot.exists()) {
+                snapshot.forEach((child) => {
+                    deleteMarker(3);
+                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
+                    addMarker(3, coordinateRG1, realTimeMap, 'SG2', child.val(), 'SG');
+                });
+            }
+            else{
+                console.log("There's no proper data");
+                alert("There's no proper data.");
+            }
+        });
+
+        firebase.database().ref().child('TK').child('TKA1').limitToLast(1).on("value", function(snapshot) {
+            if (snapshot.exists()) {
+                snapshot.forEach((child) => {
+                    deleteMarker(4);
+                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
+                    addMarker(4, coordinateRG1, realTimeMap, 'TKA1', child.val(), 'TK');
+                });
+            }
+            else{
+                console.log("There's no proper data");
+                alert("There's no proper data.");
+            }
+        });
+
+        firebase.database().ref().child('TK').child('TKM1').limitToLast(1).on("value", function(snapshot) {
+            if (snapshot.exists()) {
+                snapshot.forEach((child) => {
+                    deleteMarker(5);
+                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
+                    addMarker(5, coordinateRG1, realTimeMap, 'TKM1', child.val(), 'TK');
+                });
+            }
+            else{
+                console.log("There's no proper data");
+                alert("There's no proper data.");
+            }
+        });
+
+        firebase.database().ref().child('TK').child('TKT1').limitToLast(1).on("value", function(snapshot) {
+            if (snapshot.exists()) {
+                snapshot.forEach((child) => {
+                    deleteMarker(6);
+                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
+                    addMarker(6, coordinateRG1, realTimeMap, 'TKT1', child.val(), 'TK');
+                });
+            }
+            else{
+                console.log("There's no proper data");
+                alert("There's no proper data.");
+            }
+        });
+
+        firebase.database().ref().child('TK').child('TKT2').limitToLast(1).on("value", function(snapshot) {
+            if (snapshot.exists()) {
+                snapshot.forEach((child) => {
+                    deleteMarker(7);
+                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
+                    addMarker(7, coordinateRG1, realTimeMap, 'TKT2', child.val(), 'TK');
+                });
+            }
+            else{
+                console.log("There's no proper data");
+                alert("There's no proper data.");
+            }
+        });
+
+        firebase.database().ref().child('WB').child('WB1').limitToLast(1).on("value", function(snapshot) {
+            if (snapshot.exists()) {
+                snapshot.forEach((child) => {
+                    deleteMarker(8);
+                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
+                    addMarker(8, coordinateRG1, realTimeMap, 'WB1', child.val(), 'WB');
+                });
+            }
+            else{
+                console.log("There's no proper data");
+                alert("There's no proper data.");
+            }
+        });
+
+        firebase.database().ref().child('WB').child('WB2').limitToLast(1).on("value", function(snapshot) {
+            if (snapshot.exists()) {
+                snapshot.forEach((child) => {
+                    deleteMarker(9);
+                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
+                    addMarker(9, coordinateRG1, realTimeMap, 'WB2', child.val(), 'WB');
+                });
+            }
+            else{
+                console.log("There's no proper data");
+                alert("There's no proper data.");
+            }
+        });
+    }
+
+    function alert(message){
+        swal({
+            type: 'error',
+            title: 'Oops...',
+            text: message,
+            footer: '',
+            padding: '2em'
+        })
+    }
+
+    $( document ).ready(function() {
+        doReal();
+    });
+
+</script>
