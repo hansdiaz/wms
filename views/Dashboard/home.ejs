@@ -887,6 +887,7 @@
             day=day.split("0");
             day=day[1];
         }
+
         dateSelected=year+":"+month+":"+day;
         console.log(dateSelected);
 
@@ -1045,7 +1046,7 @@
             var animal1 = document.getElementById('select_cb_1').value;
             var animal2 = document.getElementById('select_cb_2').value;
             if(animal1==animal2){
-
+                alert("Select a different tracker to compare.");
             }
             else
                 processBehavior();
