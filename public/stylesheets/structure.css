@@ -142,6 +142,7 @@ code { color: #e7515a; }
 .layout-top-spacing { margin-top: 25px; }
 .layout-spacing { padding-bottom: 40px; }
 .layout-px-spacing { padding: 0 20px 0 20px!important; min-height: calc(100vh - 125px)!important; }
+.layout-px-spacing1 { padding: 0 20px 0 20px!important;}
 .widget.box .widget-header {
     background: #fff;
     padding: 0px 8px 0px;

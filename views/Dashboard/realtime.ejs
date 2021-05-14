@@ -36,12 +36,12 @@
                             </div>
                         </div>
                         <div class="row" >
-                            <div class="col-md-9">
+                            <div class="col-xl-12 col-md-12 col-sm-12 col-12">
                                 <div id="realTimeMap" style="height: 1000px; padding: 5px 10px 10px;"></div>
                             </div>
-                            <div class="col-md-3">
+<!--                            <div class="col-md-3">-->
 
-                            </div>
+<!--                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -73,66 +73,201 @@
 
         let contentString = null;
 
-        console.log(type);
-
         if(type === 'RG'){
             contentString =
-                '<div id="content">' +
-                '<h1 id="firstHeading" class="firstHeading">'+title+'</h1>' +
-                '<div id="bodyContent">' +
-                '<h5><b>Date</b> </h5>' +
-                '<h5><b>Latitude</b> </h5>' +
-                '<h5><b>Longitude</b> </h5>' +
-                '<h5><b>Minute Count</b> </h5>' +
-                '<h5><b>Soil Dry</b> </h5>' +
-                '<h5><b>Weather Dry</b> </h5>' +
-                "</div>" +
-                "</div>";
+                '<div class="layout-px-spacing1">' +
+                '<div class="row layout-top-spacing">' +
+                '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">' +
+                '<div class="row">' +
+                    '<h4>'+title+'</h4>' +
+                '<div class="col-lg-12 col-12 layout-spacing">' +
+                '<div class="statbox widget box box-shadow">' +
+                '<div class="widget-header">' +
+                '<div class="row">' +
+                '<div class="col-xl-12 col-md-12 col-sm-12 col-12">' +
+
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="row">' +
+                '<div class="col-md-12" style="margin-left: 10px;">' +
+                    '<table>' +
+                        '<tr>' +
+                            '<th>Date: </th>' +
+                            '<td>'+data.date+'</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<th>Latitude: </th>' +
+                            '<td>'+data.lat+'</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<th>Longitude: </th>' +
+                            '<td>'+data.long+'</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<th>Minute Count: </th>' +
+                            '<td>'+data.minutecount+'</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<th>Soil Dry: </th>' +
+                            '<td>'+data.soildry+'</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<th>Weather Dry: </th>' +
+                            '<td>'+data.weatherdry+'</td>' +
+                        '</tr>' +
+                '   </table>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>'
         }
 
         if(type === 'SG'){
             contentString =
-                '<div id="content">' +
-                '<h1 id="firstHeading" class="firstHeading">'+title+'</h1>' +
-                '<div id="bodyContent">' +
-                '<h5><b>Date</b> </h5>' +
-                '<h5><b>Latitude</b> </h5>' +
-                '<h5><b>Longitude</b> </h5>' +
-                '<h5><b>Minute Count</b> </h5>' +
-                '<h5><b>Soil Dry</b> </h5>' +
-                '<h5><b>Weather Dry</b> </h5>' +
-                "</div>" +
-                "</div>";
+                '<div class="layout-px-spacing1">' +
+                '<div class="row layout-top-spacing">' +
+                '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">' +
+                '<div class="row">' +
+                '<h4>'+title+'</h4>' +
+                '<div class="col-lg-12 col-12 layout-spacing">' +
+                '<div class="statbox widget box box-shadow">' +
+                '<div class="widget-header">' +
+                '<div class="row">' +
+                '<div class="col-xl-12 col-md-12 col-sm-12 col-12">' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="row">' +
+                '<div class="col-md-12" style="margin-left: 10px;">' +
+                '<table>' +
+                '<tr>' +
+                '<th>Date: </th>' +
+                '<td>'+data.date+'</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<th>Latitude: </th>' +
+                '<td>'+data.lat+'</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<th>Longitude: </th>' +
+                '<td>'+data.long+'</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<th>Status: </th>' +
+                '<td>'+data.status+'</td>' +
+                '</tr>' +
+                '   </table>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>'
         }
 
         if(type === 'TK'){
             contentString =
-                '<div id="content">' +
-                '<h1 id="firstHeading" class="firstHeading">'+title+'</h1>' +
-                '<div id="bodyContent">' +
-                '<h5><b>Date</b> </h5>' +
-                '<h5><b>Latitude</b> </h5>' +
-                '<h5><b>Longitude</b> </h5>' +
-                '<h5><b>Minute Count</b> </h5>' +
-                '<h5><b>Soil Dry</b> </h5>' +
-                '<h5><b>Weather Dry</b> </h5>' +
-                "</div>" +
-                "</div>";
+                '<div class="layout-px-spacing1">' +
+                '<div class="row layout-top-spacing">' +
+                '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">' +
+                '<div class="row">' +
+                '<h4>'+title+'</h4>' +
+                '<div class="col-lg-12 col-12 layout-spacing">' +
+                '<div class="statbox widget box box-shadow">' +
+                '<div class="widget-header">' +
+                '<div class="row">' +
+                '<div class="col-xl-12 col-md-12 col-sm-12 col-12">' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="row">' +
+                '<div class="col-md-12" style="margin-left: 10px;">' +
+                '<table>' +
+                '<tr>' +
+                '<th>Date: </th>' +
+                '<td>'+data.date+'</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<th>Latitude: </th>' +
+                '<td>'+data.lat+'</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<th>Longitude: </th>' +
+                '<td>'+data.long+'</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<th>Consumption: </th>' +
+                '<td>'+data.consumption+'</td>' +
+                '</tr>' +
+                '</table>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>'
         }
 
         if(type === 'WB'){
             contentString =
-                '<div id="content">' +
-                '<h1 id="firstHeading" class="firstHeading">'+title+'</h1>' +
-                '<div id="bodyContent">' +
-                '<h5><b>Date</b> </h5>' +
-                '<h5><b>Latitude</b> </h5>' +
-                '<h5><b>Longitude</b> </h5>' +
-                '<h5><b>Minute Count</b> </h5>' +
-                '<h5><b>Soil Dry</b> </h5>' +
-                '<h5><b>Weather Dry</b> </h5>' +
-                "</div>" +
-                "</div>";
+                '<div class="layout-px-spacing1">' +
+                '<div class="row layout-top-spacing">' +
+                '<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">' +
+                '<div class="row">' +
+                '<h4>'+title+'</h4>' +
+                '<div class="col-lg-12 col-12 layout-spacing">' +
+                '<div class="statbox widget box box-shadow">' +
+                '<div class="widget-header">' +
+                '<div class="row">' +
+                '<div class="col-xl-12 col-md-12 col-sm-12 col-12">' +
+
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="row">' +
+                '<div class="col-md-12" style="margin-left: 10px;">' +
+                '<table>' +
+                '<tr>' +
+                '<th>Date: </th>' +
+                '<td>'+data.date+'</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<th>Latitude: </th>' +
+                '<td>'+data.lat+'</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<th>Longitude: </th>' +
+                '<td>'+data.long+'</td>' +
+                '</tr>' +
+                '<th>Altitude: </th>' +
+                '<td>'+data.altitude+'</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<th>PH Value: </th>' +
+                '<td>'+data.ph+'</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<th>Water Temperature: </th>' +
+                '<td>'+data.temperature+'</td>' +
+                '</tr>' +
+                '</table>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>'
         }
 
 
@@ -144,15 +279,17 @@
         infoWindow.open(map, marker);
     }
 
-    function addMarker(id, location, map, title, data) {
+    function addMarker(id, location, map, title, data, type, url) {
         let marker = new google.maps.Marker({
             id: id,
             position: location,
             map: map,
-            title: title
+            title: title,
+            icon: url,
+
         });
         marker.addListener("click", () => {
-            openWindow(map, marker, title, data);
+            openWindow(map, marker, title, data, type);
         });
 
         markers[id] = marker;
@@ -161,7 +298,6 @@
 
     function deleteMarker(id) {
         let marker = markers[id];
-        console.log(marker);
         if(marker !== undefined)
             marker.setMap(null);
     }
@@ -176,13 +312,13 @@
             if (snapshot.exists()) {
                 snapshot.forEach((child) => {
                     deleteMarker(0);
-                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
-                    addMarker(0, coordinateRG1, realTimeMap, 'RG1', child.val(), 'RG');
+                    let coordinateRG1 = {lat: parseFloat(child.val().lat), lng: parseFloat(child.val().long)};
+                    addMarker(0, coordinateRG1, realTimeMap, 'RG1', child.val(), 'RG', 'http://maps.google.com/mapfiles/ms/micons/green.png');
                 });
             }
             else{
                 console.log("There's no proper data");
-                alert("There's no proper data.");
+                // alert("There's no proper data.");
             }
         });
 
@@ -190,41 +326,49 @@
             if (snapshot.exists()) {
                 snapshot.forEach((child) => {
                     deleteMarker(1);
-                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
-                    addMarker(1, coordinateRG1, realTimeMap, 'RG2', child.val(), 'RG');
+                    let coordinateRG1 = {lat: parseFloat(child.val().lat), lng: parseFloat(child.val().long)};
+                    addMarker(1, coordinateRG1, realTimeMap, 'RG2', child.val(), 'RG', 'http://maps.google.com/mapfiles/ms/micons/green.png');
                 });
             }
             else{
                 console.log("There's no proper data");
-                alert("There's no proper data.");
+                // alert("There's no proper data.");
             }
         });
 
-        firebase.database().ref().child('SG').child('SG1').limitToLast(1).on("value", function(snapshot) {
+        firebase.database().ref().child('SG').child('SG1').on("value", function(snapshot) {
             if (snapshot.exists()) {
-                snapshot.forEach((child) => {
-                    deleteMarker(2);
-                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
-                    addMarker(2, coordinateRG1, realTimeMap, 'SG1', child.val(), 'SG');
-                });
+                deleteMarker(2);
+                let coordinateRG1 = {lat: parseFloat(snapshot.val().lat), lng: parseFloat(snapshot.val().long)};
+                addMarker(2, coordinateRG1, realTimeMap, 'SG1', snapshot.val(), 'SG', 'http://maps.google.com/mapfiles/ms/micons/orange.png');
+
+                // snapshot.forEach((child) => {
+                //     console.log(child.val());
+                //     deleteMarker(2);
+                //     let coordinateRG1 = {lat: parseFloat(child.val().lat), lng: parseFloat(child.val().long)};
+                //     addMarker(2, coordinateRG1, realTimeMap, 'SG1', child.val(), 'SG');
+                // });
             }
             else{
                 console.log("There's no proper data");
-                alert("There's no proper data.");
+                // alert("There's no proper data.");
             }
         });
 
-        firebase.database().ref().child('SG').child('SG2').limitToLast(1).on("value", function(snapshot) {
+        firebase.database().ref().child('SG').child('SG2').on("value", function(snapshot) {
             if (snapshot.exists()) {
-                snapshot.forEach((child) => {
-                    deleteMarker(3);
-                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
-                    addMarker(3, coordinateRG1, realTimeMap, 'SG2', child.val(), 'SG');
-                });
+                deleteMarker(3);
+                let coordinateRG1 = {lat: parseFloat(snapshot.val().lat), lng: parseFloat(snapshot.val().long)};
+                addMarker(3, coordinateRG1, realTimeMap, 'SG2', snapshot.val(), 'SG', 'http://maps.google.com/mapfiles/ms/micons/orange.png');
+                // snapshot.forEach((child) => {
+                //     deleteMarker(3);
+                //     let coordinateRG1 = {lat: parseFloat(child.val().lat), lng: parseFloat(child.val().long)};
+                //     addMarker(3, coordinateRG1, realTimeMap, 'SG2', child.val(), 'SG');
+                // });
             }
             else{
                 console.log("There's no proper data");
-                alert("There's no proper data.");
+                // alert("There's no proper data.");
             }
         });
 
@@ -232,13 +376,13 @@
             if (snapshot.exists()) {
                 snapshot.forEach((child) => {
                     deleteMarker(4);
-                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
-                    addMarker(4, coordinateRG1, realTimeMap, 'TKA1', child.val(), 'TK');
+                    let coordinateRG1 = {lat: parseFloat(child.val().lat), lng: parseFloat(child.val().long)};
+                    addMarker(4, coordinateRG1, realTimeMap, 'TKA1', child.val(), 'TK', 'http://maps.google.com/mapfiles/ms/micons/pink.png');
                 });
             }
             else{
                 console.log("There's no proper data");
-                alert("There's no proper data.");
+                // alert("There's no proper data.");
             }
         });
 
@@ -246,13 +390,13 @@
             if (snapshot.exists()) {
                 snapshot.forEach((child) => {
                     deleteMarker(5);
-                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
-                    addMarker(5, coordinateRG1, realTimeMap, 'TKM1', child.val(), 'TK');
+                    let coordinateRG1 = {lat: parseFloat(child.val().lat), lng: parseFloat(child.val().long)};
+                    addMarker(5, coordinateRG1, realTimeMap, 'TKM1', child.val(), 'TK', 'http://maps.google.com/mapfiles/ms/micons/pink.png');
                 });
             }
             else{
                 console.log("There's no proper data");
-                alert("There's no proper data.");
+                // alert("There's no proper data.");
             }
         });
 
@@ -260,13 +404,13 @@
             if (snapshot.exists()) {
                 snapshot.forEach((child) => {
                     deleteMarker(6);
-                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
-                    addMarker(6, coordinateRG1, realTimeMap, 'TKT1', child.val(), 'TK');
+                    let coordinateRG1 = {lat: parseFloat(child.val().lat), lng: parseFloat(child.val().long)};
+                    addMarker(6, coordinateRG1, realTimeMap, 'TKT1', child.val(), 'TK', 'http://maps.google.com/mapfiles/ms/micons/pink.png');
                 });
             }
             else{
                 console.log("There's no proper data");
-                alert("There's no proper data.");
+                // alert("There's no proper data.");
             }
         });
 
@@ -274,13 +418,13 @@
             if (snapshot.exists()) {
                 snapshot.forEach((child) => {
                     deleteMarker(7);
-                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
-                    addMarker(7, coordinateRG1, realTimeMap, 'TKT2', child.val(), 'TK');
+                    let coordinateRG1 = {lat: parseFloat(child.val().lat), lng: parseFloat(child.val().long)};
+                    addMarker(7, coordinateRG1, realTimeMap, 'TKT2', child.val(), 'TK', 'http://maps.google.com/mapfiles/ms/micons/pink.png');
                 });
             }
             else{
                 console.log("There's no proper data");
-                alert("There's no proper data.");
+                // alert("There's no proper data.");
             }
         });
 
@@ -288,13 +432,13 @@
             if (snapshot.exists()) {
                 snapshot.forEach((child) => {
                     deleteMarker(8);
-                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
-                    addMarker(8, coordinateRG1, realTimeMap, 'WB1', child.val(), 'WB');
+                    let coordinateRG1 = {lat: parseFloat(child.val().lat), lng: parseFloat(child.val().long)};
+                    addMarker(8, coordinateRG1, realTimeMap, 'WB1', child.val(), 'WB', 'http://maps.google.com/mapfiles/ms/micons/blue.png');
                 });
             }
             else{
                 console.log("There's no proper data");
-                alert("There's no proper data.");
+                // alert("There's no proper data.");
             }
         });
 
@@ -302,13 +446,13 @@
             if (snapshot.exists()) {
                 snapshot.forEach((child) => {
                     deleteMarker(9);
-                    let coordinateRG1 = {lat: child.val().lat, lng: child.val().long};
-                    addMarker(9, coordinateRG1, realTimeMap, 'WB2', child.val(), 'WB');
+                    let coordinateRG1 = {lat: parseFloat(child.val().lat), lng: parseFloat(child.val().long)};
+                    addMarker(9, coordinateRG1, realTimeMap, 'WB2', child.val(), 'WB', 'http://maps.google.com/mapfiles/ms/micons/blue.png');
                 });
             }
             else{
                 console.log("There's no proper data");
-                alert("There's no proper data.");
+                // alert("There's no proper data.");
             }
         });
     }
