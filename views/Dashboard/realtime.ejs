@@ -60,11 +60,12 @@
 
     function initMap() {
         realTimeMap = new google.maps.Map(document.getElementById("realTimeMap"), {
-            zoom: 8,
+            zoom: 18,
             center: {
-                lat: 6.9271,
-                lng: 79.8612
+                lat: 6.870741,
+                lng: 79.944824
             },
+            mapTypeId: 'satellite'
         });
 
     }
@@ -269,8 +270,6 @@
                 '</div>' +
                 '</div>'
         }
-
-
 
         infoWindow = new google.maps.InfoWindow({
             content: contentString,
