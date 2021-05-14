@@ -36,9 +36,9 @@ router.get('/setStatus', function(req, res, next) {
                             status: 1,
                         }, (error) => {
                             if (error) {
-                                res.status(500);
+                                res.status(500).send('Failed');
                             } else {
-                                res.status(200);
+                                res.status(200).send('Updated');
                             }
                         });
 
@@ -47,9 +47,9 @@ router.get('/setStatus', function(req, res, next) {
                             status: 1,
                         }, (error) => {
                             if (error) {
-                                res.status(500);
+                                res.status(500).send('Failed');
                             } else {
-                                res.status(200);
+                                res.status(200).send('Updated');
                             }
                         });
                     }
