@@ -44,7 +44,7 @@ router.get('/setStatus', function(req, res, next) {
 
                     }else{
                         database.ref().child('SG').child('SG1').update({
-                            status: 1,
+                            status: 0,
                         }, (error) => {
                             if (error) {
                                 res.status(500).send('Failed');

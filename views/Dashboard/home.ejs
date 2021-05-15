@@ -293,7 +293,14 @@
             if (snapshot.exists()) {
                 snapshot.forEach((child) => {
                     if(type === "WPH"){
-                        chartDataArray.push(child.val().ph);
+                        let phValue=String(child.val().ph);
+                        phValue=phValue.split(".");
+                        let phInt= phValue[0];
+                        let phFloat= phValue[1];
+                        phFloat=phFloat.substr(0,2);
+                        phValue=phInt+"."+phFloat;
+                        phValue=parseFloat(phValue);
+                        chartDataArray.push(phValue);
                         xLabel = "Water PH Quality";
                     }
 
